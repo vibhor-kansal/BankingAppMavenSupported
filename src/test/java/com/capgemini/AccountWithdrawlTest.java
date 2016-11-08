@@ -46,19 +46,16 @@ public class AccountWithdrawlTest {
 
     @Test
     public void testAccountWithdrawlSuccess() throws ServerDowntimeException, InvalidAccountNumberException, InsufficientBalanceException {
-        when(accountRepository.updateAccount(account)).thenReturn(true);
         assertEquals(accountService.withdrawAmount(12345678, 100), account);
     }
 
     @Test(expected = InvalidAccountNumberException.class)
     public void testAccountWithdrawlInvalidAccountNumberException() throws ServerDowntimeException, InvalidAccountNumberException, InsufficientInitialBalanceException, InsufficientBalanceException {
-        when(accountRepository.updateAccount(account)).thenReturn(true);
         assertEquals(accountService.withdrawAmount(1234, 100), account);
     }
 
     @Test(expected = InsufficientBalanceException.class)
     public void testAccountWithdrawlInsufficientBalanceException() throws ServerDowntimeException, InvalidAccountNumberException, InsufficientInitialBalanceException, InsufficientBalanceException {
-        when(accountRepository.updateAccount(account)).thenReturn(true);
         assertEquals(accountService.withdrawAmount(12345678, 600), account);
     }
 
