@@ -12,13 +12,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerRepository customerRepository;
 
-    @Override
     public Set<Customer> findAll() {
         customerRepository = new CustomerRepositoryImpl();
         return customerRepository.findAll();
     }
 
-    @Override
     public Customer addNewCustomer() {
         Customer customer = new Customer();
         customer.setFirstName(GenerateRandomValues.randomNameGenerator());

@@ -1,14 +1,15 @@
 package com.capgemini.repository;
 
-import com.capgemini.exceptions.InvalidAccountNumberException;
 import com.capgemini.models.Account;
-import com.capgemini.models.Customer;
+import com.capgemini.models.response.SearchAccountResponse;
 
 public interface AccountRepository {
 
     public Boolean createAccount(Account account);
 
-    public Account searchAccount(long accountNumber) throws InvalidAccountNumberException;
+    public SearchAccountResponse searchAccount(long accountNumber);
 
     public Boolean updateAccount(Account account);
+
+    public Boolean deleteAccount(Account account);
 }

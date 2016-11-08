@@ -1,9 +1,6 @@
 package com.capgemini.initializer;
 
-import com.capgemini.exceptions.InsufficientBalanceException;
-import com.capgemini.exceptions.InsufficientInitialBalanceException;
-import com.capgemini.exceptions.InvalidAccountNumberException;
-import com.capgemini.exceptions.ServerDowntimeException;
+import com.capgemini.exceptions.*;
 import com.capgemini.models.Account;
 import com.capgemini.models.Customer;
 import com.capgemini.services.AccountService;
@@ -19,8 +16,8 @@ import java.util.Set;
 public class AppInitializer {
 
     private static Scanner sc = new Scanner(System.in);
-    private CustomerService customerService;
-    private AccountService accountService;
+    private CustomerService customerService = new CustomerServiceImpl();
+    private AccountService accountService = new AccountServiceImpl();
 
     public void showMenu() throws Exception {
         int choice;
@@ -51,19 +48,19 @@ public class AppInitializer {
                     showAccountBalance();
                     break;
                 case 6:
+                    deleteAccount();
+                    break;
+                case 7:
                     System.exit(0);
             }
         }
     }
 
     public Set<Customer> findAllCustomers() {
-        customerService = new CustomerServiceImpl();
         return customerService.findAll();
     }
 
-    private void createAccount() throws InsufficientInitialBalanceException, ServerDowntimeException {
-        customerService = new CustomerServiceImpl();
-        accountService = new AccountServiceImpl();
+    private void createAccount() throws InsufficientInitialBalanceException, ServerDowntimeException, AccountDuplicationException {
         System.out.println("Please enter the account number you wish to have : ");
         long accountNumber = sc.nextLong();
         System.out.println("Please enter the initial amount for your account : ");
@@ -103,5 +100,11 @@ public class AppInitializer {
         System.out.println("Please enter your account number : ");
         long accountNumber = sc.nextLong();
         System.out.println("Balance for account number " + accountNumber + " is : " + accountService.showBalance(accountNumber));
+    }
+
+    private void deleteAccount() throws ServerDowntimeException, InvalidAccountNumberException {
+        System.out.println("Please enter your account number : ");
+        long accountNumber = sc.nextLong();
+        System.out.println("Account " + accountNumber + " is " + accountService.deleteAccount(accountNumber));
     }
 }

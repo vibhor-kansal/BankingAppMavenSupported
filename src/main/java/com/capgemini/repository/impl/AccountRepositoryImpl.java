@@ -1,16 +1,15 @@
 package com.capgemini.repository.impl;
 
-import com.capgemini.exceptions.InvalidAccountNumberException;
 import com.capgemini.models.Account;
-import com.capgemini.models.Customer;
 import com.capgemini.repository.AccountRepository;
+import com.capgemini.models.response.SearchAccountResponse;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AccountRepositoryImpl implements AccountRepository {
 
     private static Set<Account> accounts = new HashSet();
-    Map<Customer, Account> customerAccountMap = new HashMap();
 
     public Boolean createAccount(Account account) {
         accounts.add(account);
@@ -18,18 +17,23 @@ public class AccountRepositoryImpl implements AccountRepository {
         return true;
     }
 
-    public Account searchAccount(long accountNumber) throws InvalidAccountNumberException {
-        Account resultAccount = null;
+    public SearchAccountResponse searchAccount(long accountNumber) {
         for(Account account : accounts) {
             if(account.getAccountNumber() == accountNumber) {
-                resultAccount = account;
+                return new SearchAccountResponse(account, true);
             }
         }
-        return resultAccount;
+        return new SearchAccountResponse(new Account(), false);
     }
 
     public Boolean updateAccount(Account accountToUpdate) {
         accounts.add(accountToUpdate);
+        System.out.println(accounts);
+        return true;
+    }
+
+    public Boolean deleteAccount(Account account) {
+        accounts.remove(account);
         System.out.println(accounts);
         return true;
     }

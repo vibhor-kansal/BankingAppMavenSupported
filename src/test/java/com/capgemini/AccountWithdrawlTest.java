@@ -1,10 +1,7 @@
 package com.capgemini;
 
 import com.capgemini.constants.BankingConstants;
-import com.capgemini.exceptions.AccountDuplicationException;
-import com.capgemini.exceptions.InsufficientInitialBalanceException;
-import com.capgemini.exceptions.InvalidAccountNumberException;
-import com.capgemini.exceptions.ServerDowntimeException;
+import com.capgemini.exceptions.*;
 import com.capgemini.models.Account;
 import com.capgemini.models.Customer;
 import com.capgemini.repository.AccountRepository;
@@ -21,7 +18,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class AccountDepositMoneyTest {
+public class AccountWithdrawlTest {
 
     Account account;
     AccountService accountService;
@@ -48,15 +45,21 @@ public class AccountDepositMoneyTest {
     }
 
     @Test
-    public void testAccountDepositSuccess() throws ServerDowntimeException, InvalidAccountNumberException {
+    public void testAccountWithdrawlSuccess() throws ServerDowntimeException, InvalidAccountNumberException, InsufficientBalanceException {
         when(accountRepository.updateAccount(account)).thenReturn(true);
-        assertEquals(accountService.depositAmount(12345678, 2000), account);
+        assertEquals(accountService.withdrawAmount(12345678, 100), account);
     }
 
     @Test(expected = InvalidAccountNumberException.class)
-    public void testAccountDepositException() throws ServerDowntimeException, InvalidAccountNumberException {
+    public void testAccountWithdrawlInvalidAccountNumberException() throws ServerDowntimeException, InvalidAccountNumberException, InsufficientInitialBalanceException, InsufficientBalanceException {
         when(accountRepository.updateAccount(account)).thenReturn(true);
-        assertEquals(accountService.depositAmount(1234, 2000), account);
+        assertEquals(accountService.withdrawAmount(1234, 100), account);
+    }
+
+    @Test(expected = InsufficientBalanceException.class)
+    public void testAccountWithdrawlInsufficientBalanceException() throws ServerDowntimeException, InvalidAccountNumberException, InsufficientInitialBalanceException, InsufficientBalanceException {
+        when(accountRepository.updateAccount(account)).thenReturn(true);
+        assertEquals(accountService.withdrawAmount(12345678, 600), account);
     }
 
     @After

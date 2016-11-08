@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class AccountDepositMoneyTest {
+public class AccountShowBalanceTest {
 
     Account account;
     AccountService accountService;
@@ -44,19 +44,17 @@ public class AccountDepositMoneyTest {
         account.setAmount(BankingConstants.INITIAL_AMOUNT);
         account.setCustomer(customer);
 
-        account = accountService.createAccount(12345678, BankingConstants.INITIAL_AMOUNT, customer);
+        accountService.createAccount(12345678, BankingConstants.INITIAL_AMOUNT, customer);
     }
 
     @Test
-    public void testAccountDepositSuccess() throws ServerDowntimeException, InvalidAccountNumberException {
-        when(accountRepository.updateAccount(account)).thenReturn(true);
-        assertEquals(accountService.depositAmount(12345678, 2000), account);
+    public void testAccountShowBalanceSuccess() throws InvalidAccountNumberException {
+        assertEquals(accountService.showBalance(12345678), BankingConstants.INITIAL_AMOUNT, 0);
     }
 
     @Test(expected = InvalidAccountNumberException.class)
-    public void testAccountDepositException() throws ServerDowntimeException, InvalidAccountNumberException {
-        when(accountRepository.updateAccount(account)).thenReturn(true);
-        assertEquals(accountService.depositAmount(1234, 2000), account);
+    public void testAccountShowBalanceException() throws InvalidAccountNumberException {
+        assertEquals(accountService.showBalance(1234), BankingConstants.INITIAL_AMOUNT, 0);
     }
 
     @After
