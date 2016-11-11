@@ -7,6 +7,7 @@
 
 
     <!-- Enable autowiring -->
+    <context:annotation-config/>
     <context:component-scan base-package="com.capgemini"/>
 
     <!-- Properties Files (lower 'order' == higher priority) -->
